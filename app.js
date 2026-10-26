@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
+  const t = AppI18n.t;
   let type = 'url', generated = null, links = [];
   const form = document.getElementById('qr-form'), status = document.getElementById('status');
   const value = id => document.getElementById(id).value;
@@ -14,12 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-kind]').forEach(tab => tab.setAttribute('aria-pressed', String(tab === button)));
     document.getElementById('text-fields').hidden = type === 'wifi'; document.getElementById('wifi-fields').hidden = type !== 'wifi';
     const label = document.getElementById('content-label'), content = document.getElementById('content');
-    label.textContent = type === 'text' ? 'QR 코드에 담을 텍스트' : '웹사이트 주소';
-    content.placeholder = type === 'text' ? '한글·영문·숫자 등 원하는 내용을 입력하세요.' : 'https://example.com';
-    setStatus('내용을 입력하고 만들기를 누르세요.');
+    label.textContent = type === 'text' ? t('textLabel') : t('urlLabel');
+    content.placeholder = type === 'text' ? t('textPlaceholder') : 'https://example.com';
+    setStatus(t('inputPrompt'));
   }));
-  form.addEventListener('input', () => { if (generated) { clear(); setStatus('내용이 변경됐습니다. QR 코드를 다시 만들어 주세요.'); } });
-  form.addEventListener('change', () => { if (generated) { clear(); setStatus('설정이 변경됐습니다. QR 코드를 다시 만들어 주세요.'); } document.getElementById('wifi-password').disabled = value('wifi-auth') === 'nopass'; });
+  form.addEventListener('input', () => { if (generated) { clear(); setStatus(t('qrChanged')); } });
+  form.addEventListener('change', () => { if (generated) { clear(); setStatus(t('qrSettingsChanged')); } document.getElementById('wifi-password').disabled = value('wifi-auth') === 'nopass'; });
   form.addEventListener('submit', event => {
     event.preventDefault(); clear();
     try {
@@ -33,10 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const pngLink = document.getElementById('save-png'); pngLink.href = pngUrl; pngLink.removeAttribute('aria-disabled');
       }, 'image/png');
       document.getElementById('qr-empty').hidden = true; document.getElementById('qr-result').hidden = false;
-      document.getElementById('qr-details').textContent = `${canvas.width} × ${canvas.height}px · PNG / 벡터 SVG · 여백 4모듈`;
-      setStatus('QR 코드를 만들었습니다. 카메라로 인식되는지 확인한 뒤 사용하세요.');
-    } catch (error) { setStatus(error.message || 'QR 코드를 만들지 못했습니다.', true); }
+      document.getElementById('qr-details').textContent = t('qrDetails', {width: canvas.width, height: canvas.height});
+      setStatus(t('qrDone'));
+    } catch (error) { setStatus(AppI18n.error(error.message) || t('qrFailed'), true); }
   });
-  document.getElementById('reset-button').addEventListener('click', () => { form.reset(); clear(); document.getElementById('wifi-password').disabled = false; setStatus('입력한 내용을 지웠습니다.'); });
+  document.getElementById('reset-button').addEventListener('click', () => { form.reset(); clear(); document.getElementById('wifi-password').disabled = false; setStatus(t('inputCleared')); });
   window.addEventListener('pagehide', clear);
 });
