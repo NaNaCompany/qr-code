@@ -27,7 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const canvas = document.getElementById('qr-canvas'); QrMaker.draw(canvas, result.code, Number(value('size')));
       generated = result; const svg = new Blob([QrMaker.svg(result.code)], {type: 'image/svg+xml;charset=utf-8'}); const url = URL.createObjectURL(svg); links.push(url);
       const svgLink = document.getElementById('save-svg'); svgLink.href = url; svgLink.removeAttribute('aria-disabled');
-      const pngLink = document.getElementById('save-png'); pngLink.href = canvas.toDataURL('image/png'); pngLink.removeAttribute('aria-disabled');
+      canvas.toBlob(blob => {
+        if (!blob || generated !== result) return;
+        const pngUrl = URL.createObjectURL(blob); links.push(pngUrl);
+        const pngLink = document.getElementById('save-png'); pngLink.href = pngUrl; pngLink.removeAttribute('aria-disabled');
+      }, 'image/png');
       document.getElementById('qr-empty').hidden = true; document.getElementById('qr-result').hidden = false;
       document.getElementById('qr-details').textContent = `${canvas.width} × ${canvas.height}px · PNG / 벡터 SVG · 여백 4모듈`;
       setStatus('QR 코드를 만들었습니다. 카메라로 인식되는지 확인한 뒤 사용하세요.');
