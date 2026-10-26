@@ -1,0 +1,268 @@
+{
+  "library": "qrcode",
+  "version": "1.5.4",
+  "selected_license": "MIT",
+  "file": "qrcode.min.js",
+  "sha256": "78c076acf8baed832db872b3248360207bb83dc8d16f0bb402b30e6c23df378d",
+  "packages": [
+    {
+      "name": "qrcode",
+      "version": "1.5.4",
+      "license": "MIT",
+      "source": "git://github.com/soldair/node-qrcode.git",
+      "license_files": [
+        "license"
+      ]
+    },
+    {
+      "name": "dijkstrajs",
+      "version": "1.0.3",
+      "license": "MIT",
+      "source": "git://github.com/tcort/dijkstrajs",
+      "license_files": [
+        "LICENSE.md"
+      ]
+    },
+    {
+      "name": "pngjs",
+      "version": "7.0.0",
+      "license": "MIT",
+      "source": "git://github.com/pngjs/pngjs.git",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    {
+      "name": "yargs",
+      "version": "15.4.1",
+      "license": "MIT",
+      "source": "https://github.com/yargs/yargs.git",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    {
+      "name": "cliui",
+      "version": "6.0.0",
+      "license": "ISC",
+      "source": "http://github.com/yargs/cliui.git",
+      "license_files": [
+        "LICENSE.txt"
+      ]
+    },
+    {
+      "name": "string-width",
+      "version": "4.2.3",
+      "license": "MIT",
+      "source": "sindresorhus/string-width",
+      "license_files": [
+        "license"
+      ]
+    },
+    {
+      "name": "emoji-regex",
+      "version": "8.0.0",
+      "license": "MIT",
+      "source": "https://github.com/mathiasbynens/emoji-regex.git",
+      "license_files": []
+    },
+    {
+      "name": "is-fullwidth-code-point",
+      "version": "3.0.0",
+      "license": "MIT",
+      "source": "sindresorhus/is-fullwidth-code-point",
+      "license_files": [
+        "license"
+      ]
+    },
+    {
+      "name": "strip-ansi",
+      "version": "6.0.1",
+      "license": "MIT",
+      "source": "chalk/strip-ansi",
+      "license_files": [
+        "license"
+      ]
+    },
+    {
+      "name": "ansi-regex",
+      "version": "5.0.1",
+      "license": "MIT",
+      "source": "chalk/ansi-regex",
+      "license_files": [
+        "license"
+      ]
+    },
+    {
+      "name": "wrap-ansi",
+      "version": "6.2.0",
+      "license": "MIT",
+      "source": "chalk/wrap-ansi",
+      "license_files": [
+        "license"
+      ]
+    },
+    {
+      "name": "ansi-styles",
+      "version": "4.3.0",
+      "license": "MIT",
+      "source": "chalk/ansi-styles",
+      "license_files": [
+        "license"
+      ]
+    },
+    {
+      "name": "color-convert",
+      "version": "2.0.1",
+      "license": "MIT",
+      "source": "Qix-/color-convert",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    {
+      "name": "color-name",
+      "version": "1.1.4",
+      "license": "MIT",
+      "source": "git@github.com:colorjs/color-name.git",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    {
+      "name": "decamelize",
+      "version": "1.2.0",
+      "license": "MIT",
+      "source": "sindresorhus/decamelize",
+      "license_files": [
+        "license"
+      ]
+    },
+    {
+      "name": "find-up",
+      "version": "4.1.0",
+      "license": "MIT",
+      "source": "sindresorhus/find-up",
+      "license_files": [
+        "license"
+      ]
+    },
+    {
+      "name": "locate-path",
+      "version": "5.0.0",
+      "license": "MIT",
+      "source": "sindresorhus/locate-path",
+      "license_files": [
+        "license"
+      ]
+    },
+    {
+      "name": "p-locate",
+      "version": "4.1.0",
+      "license": "MIT",
+      "source": "sindresorhus/p-locate",
+      "license_files": [
+        "license"
+      ]
+    },
+    {
+      "name": "p-limit",
+      "version": "2.3.0",
+      "license": "MIT",
+      "source": "sindresorhus/p-limit",
+      "license_files": [
+        "license"
+      ]
+    },
+    {
+      "name": "p-try",
+      "version": "2.2.0",
+      "license": "MIT",
+      "source": "sindresorhus/p-try",
+      "license_files": [
+        "license"
+      ]
+    },
+    {
+      "name": "path-exists",
+      "version": "4.0.0",
+      "license": "MIT",
+      "source": "sindresorhus/path-exists",
+      "license_files": [
+        "license"
+      ]
+    },
+    {
+      "name": "get-caller-file",
+      "version": "2.0.5",
+      "license": "ISC",
+      "source": "git+https://github.com/stefanpenner/get-caller-file.git",
+      "license_files": [
+        "LICENSE.md"
+      ]
+    },
+    {
+      "name": "require-directory",
+      "version": "2.1.1",
+      "license": "MIT",
+      "source": "git://github.com/troygoode/node-require-directory.git",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    {
+      "name": "require-main-filename",
+      "version": "2.0.0",
+      "license": "ISC",
+      "source": "git+ssh://git@github.com/yargs/require-main-filename.git",
+      "license_files": [
+        "LICENSE.txt"
+      ]
+    },
+    {
+      "name": "set-blocking",
+      "version": "2.0.0",
+      "license": "ISC",
+      "source": "git+https://github.com/yargs/set-blocking.git",
+      "license_files": [
+        "LICENSE.txt"
+      ]
+    },
+    {
+      "name": "which-module",
+      "version": "2.0.1",
+      "license": "ISC",
+      "source": "git+https://github.com/nexdrew/which-module.git",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    {
+      "name": "y18n",
+      "version": "4.0.3",
+      "license": "ISC",
+      "source": "git@github.com:yargs/y18n.git",
+      "license_files": [
+        "LICENSE"
+      ]
+    },
+    {
+      "name": "yargs-parser",
+      "version": "18.1.3",
+      "license": "ISC",
+      "source": "https://github.com/yargs/yargs-parser.git",
+      "license_files": [
+        "LICENSE.txt"
+      ]
+    },
+    {
+      "name": "camelcase",
+      "version": "5.3.1",
+      "license": "MIT",
+      "source": "sindresorhus/camelcase",
+      "license_files": [
+        "license"
+      ]
+    }
+  ]
+}
