@@ -8,6 +8,24 @@ ROOT = Path(__file__).resolve().parents[1]
 LANGUAGES = {'ko':'한국어','en':'English','ja':'日本語','zh':'中文','es':'Español','de':'Deutsch','fr':'Français','pt':'Português','ru':'Русский'}
 NS='http://www.sitemaps.org/schemas/sitemap/0.9'
 
+
+# Shared book banner adapter; the campaign itself is maintained in src_cdn.
+def _shared_book_banner(value):
+    if isinstance(value, dict) and any(isinstance(key, str) and key.endswith('.html') for key in value):
+        return {key: _shared_book_banner(item) for key, item in value.items()}
+    if not isinstance(value, str) or not value.lstrip('\ufeff \r\n\t').lower().startswith(('<!doctype html', '<html')) or 'https://nanalab.kr/src_cdn/banner/astra.js' in value:
+        return value
+    snippet = '<!-- NaNa shared book banner --><script defer src="https://nanalab.kr/src_cdn/banner/astra.js"></script><!-- /NaNa shared book banner -->'
+    import re
+    opening = re.search(r'<head\b[^>]*>', value, re.I)
+    if opening:
+        return value[:opening.end()] + snippet + value[opening.end():]
+    for closing in ['</body>', '</html>']:
+        at = value.lower().find(closing)
+        if at >= 0:
+            return value[:at] + snippet + value[at:]
+    return value + snippet
+
 def outputs():
     config=json.loads((ROOT/'content/locales.json').read_text(encoding='utf-8'))
     source=(ROOT/'content/index.ko.html').read_text(encoding='utf-8')
@@ -17,7 +35,7 @@ def outputs():
     rendered={}
     for lang in LANGUAGES:
         d=config['messages'][lang]
-        def s(key): return escape(d[key],quote=True)
+        def s(key): return _shared_book_banner((escape(d[key],quote=True)))
         name=s(kind+'Name');lead=s(kind+'Lead')
         directory='https://nanalab.kr/'+('' if lang=='ko' else lang+'/')
         head=source.split('</head>')[0]
@@ -26,10 +44,10 @@ def outputs():
         def meta(match):
             tag=match.group()
             if re.search(r'(?:name|property)="(?:description|og:description)"',tag):
-                return re.sub(r'content="[^"]*"',f'content="{lead}"',tag)
-            if 'property="og:title"' in tag:return re.sub(r'content="[^"]*"',f'content="{name} | NaNa Lab"',tag)
-            if 'property="og:url"' in tag:return re.sub(r'content="[^"]*"',f'content="{urls[lang]}"',tag)
-            return tag
+                return _shared_book_banner((re.sub(r'content="[^"]*"',f'content="{lead}"',tag)))
+            if 'property="og:title"' in tag:return _shared_book_banner((re.sub(r'content="[^"]*"',f'content="{name} | NaNa Lab"',tag)))
+            if 'property="og:url"' in tag:return _shared_book_banner((re.sub(r'content="[^"]*"',f'content="{urls[lang]}"',tag)))
+            return _shared_book_banner((tag))
         head=re.sub(r'<meta\b[^>]*>',meta,head)
         head=re.sub(r'<link rel="canonical" href="[^"]*">',f'<link rel="canonical" href="{urls[lang]}">',head)
         schema={'@context':'https://schema.org','@type':'WebApplication','name':d[kind+'Name'],
@@ -60,7 +78,7 @@ def outputs():
             if kind=='word':guidance.append(('faq','wordReview'))
         else:
             def field(label,id,type='text'):
-                return f'<div class="field"><label for="{id}">{s(label)}</label><input id="{id}" type="{type}" autocomplete="off" spellcheck="false"></div>'
+                return _shared_book_banner((f'<div class="field"><label for="{id}">{s(label)}</label><input id="{id}" type="{type}" autocomplete="off" spellcheck="false"></div>'))
             tool=f'''<div class="workspace qr-workspace"><section class="panel"><h2>{s('qrContent')}</h2><form id="qr-form" novalidate><div class="kind-tabs" aria-label="{s('qrContent')}">'''+''.join(f'<button type="button" class="kind-tab" data-kind="{type}" aria-pressed="{str(type=="url").lower()}">{s(label) if label!="wifi" else "Wi-Fi"}</button>' for type,label in [('url','website'),('text','text'),('wifi','wifi')])+f'''</div><div id="text-fields" class="field"><label id="content-label" for="content">{s('urlLabel')}</label><textarea id="content" placeholder="https://example.com" spellcheck="false" autocomplete="off" maxlength="2000"></textarea></div><div id="wifi-fields" hidden>{field('ssid','wifi-ssid')}<div class="field"><label for="wifi-auth">{s('auth')}</label><select id="wifi-auth"><option value="WPA">{s('personal')}</option><option value="WEP">WEP</option><option value="nopass">{s('open')}</option></select></div>{field('password','wifi-password','password')}<label class="check"><input type="checkbox" id="wifi-hidden"><span>{s('hidden')}</span></label><p class="hint">{s('wifiNotice')}</p></div><div class="field"><label for="size">{s('size')}</label><select id="size"><option value="256">{s('size256')}</option><option value="512" selected>{s('size512')}</option><option value="1024">{s('size1024')}</option></select><p class="hint">{s('sizeNote')}</p></div><div class="field"><label for="ecc">{s('ecc')}</label><select id="ecc"><option value="M">{s('eccM')}</option><option value="Q">{s('eccQ')}</option><option value="H">{s('eccH')}</option></select></div><div class="actions"><button type="submit" class="button primary">{name}</button><button type="button" class="button" id="reset-button">{s('reset')}</button></div><p class="status" id="status" role="status" aria-live="polite"></p></form></section><section class="panel qr-output" aria-labelledby="qr-heading"><h2 id="qr-heading">{s('myQr')}</h2><div class="qr-empty" id="qr-empty"><p>{s('empty1')}<br>{s('empty2')}</p></div><div id="qr-result" hidden><canvas id="qr-canvas" role="img" aria-label="{s('qrAlt')}"></canvas><p class="result-meta" id="qr-details"></p><div class="actions"><a class="button primary" id="save-png" download="nana-qr-code.png" aria-disabled="true">{s('png')}</a><a class="button" id="save-svg" download="nana-qr-code.svg" aria-disabled="true">{s('svg')}</a></div></div><p class="hint">{s('staticNote')}</p></section></div>'''
             guidance=[('how','qrHelp'),('faq','qrNote')]
         faq=''.join(f'<details open><summary>{s(title)}</summary><p>{s(body)}</p></details>' for title,body in guidance)
@@ -80,7 +98,7 @@ def outputs():
     for url in urls.values():
         entry=ET.SubElement(urlset,'{'+NS+'}url');ET.SubElement(entry,'{'+NS+'}loc').text=url
     rendered['sitemap.xml']='<?xml version="1.0" encoding="UTF-8"?>\n'+ET.tostring(urlset,encoding='unicode')+'\n'
-    return rendered
+    return _shared_book_banner((rendered))
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--check',action='store_true');args=parser.parse_args()
@@ -90,7 +108,7 @@ def main():
         if args.check:
             assert path.is_file() and path.read_text(encoding='utf-8')==text,'Stale locale file: '+name
         else:
-            path.parent.mkdir(parents=True,exist_ok=True);path.write_text(text,encoding='utf-8',newline='\n')
+            path.parent.mkdir(parents=True,exist_ok=True);path.write_text(_shared_book_banner((text)),encoding='utf-8',newline='\n')
     print(json.dumps({'status':'checked' if args.check else 'built','localized_pages':len(generated)-1,'sitemap_urls':len(generated)-1}))
 
 if __name__=='__main__':main()
